@@ -985,7 +985,7 @@ public class ES3
         else if (settings.location == Location.Cache)
             ES3File.RemoveCachedFile(settings);
         else if (settings.location == Location.Resources)
-            throw new System.NotSupportedException("Deleting files from Resources is not supported.");
+            throw new System.NotSupportedException("Deleting files from Resources is not possible.");
     }
 
     /// <summary>Copies a file from one path to another.</summary>
@@ -1398,11 +1398,11 @@ public class ES3
         if (settings.location == ES3.Location.File)
         {
             if (settings.directory == ES3.Directory.PersistentDataPath)
-                settings.path = Application.persistentDataPath;
+                settings.path = ES3IO.persistentDataPath;
             else 
-                settings.path = Application.dataPath;
+                settings.path = ES3IO.dataPath;
         }
-        return GetFiles(settings);
+        return GetFiles(new ES3Settings());
     }
 
     /// <summary>Gets an array of all of the file names in a directory.</summary>
@@ -1624,6 +1624,7 @@ public class ES3
     public static void Init()
     {
         var settings = ES3Settings.defaultSettings;
+        var pdp = ES3IO.persistentDataPath; // Call this to initialise ES3IO for threading purposes.
         ES3TypeMgr.Init();
     }
 

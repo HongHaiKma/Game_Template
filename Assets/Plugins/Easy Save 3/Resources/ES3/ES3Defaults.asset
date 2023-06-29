@@ -30,14 +30,14 @@ MonoBehaviour:
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
+    - Assembly-CSharp
     - Assembly-CSharp-firstpass
-    - AssetUsageFinder
     - ScriptableObject-Architecture
-    - ScriptableObject-Architecture.Editor
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
   addAllPrefabsToManager: 1
+  collectDependenciesDepth: 4
   logDebugInfo: 0
   logWarnings: 1
   logErrors: 1

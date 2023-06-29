@@ -52,8 +52,16 @@ namespace ES3Internal
 #else
                     var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                     foreach (var assembly in assemblies)
-                        if (assemblyNames.Contains(assembly.GetName().Name))
-                            assemblyList.Add(assembly);
+                    {
+                        // This try/catch block is here to catch errors such as assemblies containing double-byte characters in their path.
+                        // This obviously won't work if exceptions are disabled.
+                        try
+                        {
+                            if (assemblyNames.Contains(assembly.GetName().Name))
+                                assemblyList.Add(assembly);
+                        }
+                        catch { }
+                    }
 #endif
                     _assemblies = assemblyList.ToArray();
                 }
@@ -75,7 +83,7 @@ namespace ES3Internal
                 return null;
         }
 
-        public static List<FieldInfo> GetSerializableFields(Type type, List<FieldInfo> serializableFields = null, bool safe = true, string[] memberNames = null, BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
+        public static List<FieldInfo> GetSerializableFields(Type type, List<FieldInfo> serializableFields = null, bool safe = true, string[] memberNames = null, BindingFlags bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
         {
             if (type == null)
                 return new List<FieldInfo>();
@@ -88,6 +96,10 @@ namespace ES3Internal
             foreach (var field in fields)
             {
                 var fieldName = field.Name;
+
+                // Skip if it's already been added.
+                if (serializableFields.Exists(x => x.Name == fieldName))
+                    continue;
 
                 // If a members array was provided as a parameter, only include the field if it's in the array.
                 if (memberNames != null)
@@ -134,9 +146,10 @@ namespace ES3Internal
                 serializableFields.Add(field);
             }
 
-            var baseType = BaseType(type);
+            // This isn't necessary as GetFields will get base fields with the above binding flags.
+            /*var baseType = BaseType(type);
             if (baseType != null && baseType != typeof(System.Object) && baseType != typeof(UnityEngine.Object))
-                GetSerializableFields(BaseType(type), serializableFields, safe, memberNames);
+                GetSerializableFields(BaseType(type), serializableFields, safe, memberNames);*/
 
             return serializableFields;
         }
@@ -156,6 +169,12 @@ namespace ES3Internal
 
             foreach (var p in properties)
             {
+                var propertyName = p.Name;
+
+                // Skip if it's already been added.
+                if (serializableProperties.Exists(x => x.Name == propertyName))
+                    continue;
+
                 if (AttributeIsDefined(p, es3SerializableAttributeType))
                 {
                     serializableProperties.Add(p);
@@ -164,8 +183,6 @@ namespace ES3Internal
 
                 if (AttributeIsDefined(p, es3NonSerializableAttributeType))
                     continue;
-
-                var propertyName = p.Name;
 
                 if (excludedPropertyNames.Contains(propertyName))
                     continue;

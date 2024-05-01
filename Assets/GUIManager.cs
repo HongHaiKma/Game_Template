@@ -27,7 +27,7 @@ public class GUIManager : MonoBehaviour
     public GameObject go_CheatPanel;
     // public TextMeshProUGUI txt_Levels;
 
-    public List<DevLocker.Utils.SceneReference> m_Levels;
+    // public List<DevLocker.Utils.SceneReference> m_Levels;
     // public List<> m_Levels;
 
     public void OpenCheatGame()
@@ -59,7 +59,7 @@ public class GUIManager : MonoBehaviour
         //     LoadPlayScene();
         // }
 
-        ProfileManager.SetLevel(level);
+        // ProfileManager.SetLevel(level);
         LoadPlayScene();
     }
 
@@ -326,9 +326,9 @@ public class GUIManager : MonoBehaviour
 
         FindMainCanvas();
 
-        String curScene = m_Levels[ProfileManager.GetLevel() - 1].SceneName;
+        // String curScene = m_Levels[1].SceneName;
 
-        String scene = m_Levels[ProfileManager.GetLevel() - 1].SceneName;
+        String scene = "MainScene";
 
         Addressables.LoadSceneAsync(scene, LoadSceneMode.Single).Completed += LoadPlaySceneCompleted;
 
@@ -359,60 +359,60 @@ public class GUIManager : MonoBehaviour
             // String nextScene = m_Levels[ProfileManager.GetLevel()].SceneName;
             // var nextLevel = Addressables.LoadSceneAsync(nextScene, LoadSceneMode.Additive, false);
             // m_NextLevel = nextLevel;
-            if (m_LoadBannerGap > 2)
-            {
-                AdsManager.Instance.LoadBanner();
-            }
+            // if (m_LoadBannerGap > 2)
+            // {
+            //     AdsManager.Instance.LoadBanner();
+            // }
         }
     }
 
-    public async UniTask LoadSceneNotFirstTime()
-    {
-        await UniTask.WaitUntil(() => m_NextLevel.Result.ActivateAsync().isDone == true);
+    // public async UniTask LoadSceneNotFirstTime()
+    // {
+    //     await UniTask.WaitUntil(() => m_NextLevel.Result.ActivateAsync().isDone == true);
 
-        UnloadScene3();
+    //     UnloadScene3();
 
-        // // String curScene = m_Levels[ProfileManager.GetLevel() - 1].SceneName;
-        // String nextScene = m_Levels[ProfileManager.GetLevel()].SceneName;
+    //     // // String curScene = m_Levels[ProfileManager.GetLevel() - 1].SceneName;
+    //     // String nextScene = m_Levels[ProfileManager.GetLevel()].SceneName;
 
-        // // var curLevel = Addressables.LoadSceneAsync(curScene, LoadSceneMode.Additive, true);
-        // var nextLevel = Addressables.LoadSceneAsync(nextScene, LoadSceneMode.Additive, false);
+    //     // // var curLevel = Addressables.LoadSceneAsync(curScene, LoadSceneMode.Additive, true);
+    //     // var nextLevel = Addressables.LoadSceneAsync(nextScene, LoadSceneMode.Additive, false);
 
-        // // m_CurrentLevel = curLevel;
-        // m_NextLevel = nextLevel;
-    }
+    //     // // m_CurrentLevel = curLevel;
+    //     // m_NextLevel = nextLevel;
+    // }
 
-    void UnloadScene3()
-    {
-        Addressables.UnloadSceneAsync(m_CurrentLevel, true).Completed += op =>
-        {
-            if (op.Status == AsyncOperationStatus.Succeeded)
-            {
-                Helper.DebugLog("YYYYYYYYYYYYYYYYYYY");
-                m_CurrentLevel = m_NextLevel;
-                String nextScene = m_Levels[ProfileManager.GetLevel()].SceneName;
-                var nextLevel = Addressables.LoadSceneAsync(nextScene, LoadSceneMode.Additive, false);
-                m_NextLevel = nextLevel;
-                // LoadSceneNotFirstTime();
-            }
-        };
-    }
+    // void UnloadScene3()
+    // {
+    //     Addressables.UnloadSceneAsync(m_CurrentLevel, true).Completed += op =>
+    //     {
+    //         if (op.Status == AsyncOperationStatus.Succeeded)
+    //         {
+    //             Helper.DebugLog("YYYYYYYYYYYYYYYYYYY");
+    //             m_CurrentLevel = m_NextLevel;
+    //             String nextScene = m_Levels[ProfileManager.GetLevel()].SceneName;
+    //             var nextLevel = Addressables.LoadSceneAsync(nextScene, LoadSceneMode.Additive, false);
+    //             m_NextLevel = nextLevel;
+    //             // LoadSceneNotFirstTime();
+    //         }
+    //     };
+    // }
 
-    void UnloadScene(AsyncOperationHandle<SceneInstance> _unloadScene)
-    {
-        Addressables.UnloadSceneAsync(_unloadScene, true).Completed += op =>
-        {
-            if (op.Status == AsyncOperationStatus.Succeeded)
-            {
-                Helper.DebugLog("YYYYYYYYYYYYYYYYYYY");
-                m_CurrentLevel = m_NextLevel;
-                String nextScene = m_Levels[ProfileManager.GetLevel()].SceneName;
-                var nextLevel = Addressables.LoadSceneAsync(nextScene, LoadSceneMode.Additive, false);
-                m_NextLevel = nextLevel;
-                // LoadSceneNotFirstTime();
-            }
-        };
-    }
+    // void UnloadScene(AsyncOperationHandle<SceneInstance> _unloadScene)
+    // {
+    //     Addressables.UnloadSceneAsync(_unloadScene, true).Completed += op =>
+    //     {
+    //         if (op.Status == AsyncOperationStatus.Succeeded)
+    //         {
+    //             Helper.DebugLog("YYYYYYYYYYYYYYYYYYY");
+    //             m_CurrentLevel = m_NextLevel;
+    //             String nextScene = m_Levels[ProfileManager.GetLevel()].SceneName;
+    //             var nextLevel = Addressables.LoadSceneAsync(nextScene, LoadSceneMode.Additive, false);
+    //             m_NextLevel = nextLevel;
+    //             // LoadSceneNotFirstTime();
+    //         }
+    //     };
+    // }
 
     void UnloadScene2(AsyncOperationHandle<SceneInstance> _unloadScene)
     {
@@ -437,12 +437,12 @@ public class GUIManager : MonoBehaviour
         m_NextLevel.Result.Activate();
     }
 
-    [Button]
-    public void TestLoadPlayScene()
-    {
-        ProfileManager.SetLevel(ProfileManager.GetLevel() + 1);
-        LoadPlayScene();
-    }
+    // [Button]
+    // public void TestLoadPlayScene()
+    // {
+    //     ProfileManager.SetLevel(ProfileManager.GetLevel() + 1);
+    //     LoadPlayScene();
+    // }
 
     #endregion
 
